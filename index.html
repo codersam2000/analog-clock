@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>anlogClock</title>
+</head>
+<style>
+    html,body{
+        padding: 0;
+        margin: 0;
+        background-color: rgba(241, 244, 245, 0.719);
+    }
+    .clock-container{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100vh;
+    }
+    .clock{
+        width: 300px;
+        height: 300px;
+        background-color: #fff;
+        margin: 10px;
+        border-radius: 50%;
+        border: 15px solid #fff;
+        box-shadow: inset 0px 0px 2px 1px rgb(155, 151, 151), 0px 0px 2px 1px rgb(158, 154, 154);
+        background-image: url(clock.png);
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+        position:relative;
+    }
+    .clock::after{
+       content:"" ;
+       display: block;
+       width: 10px;
+       height:10px;
+       background:rgb(233, 211, 11);
+       border-radius:50%;
+       position: absolute;
+       left:0;
+       right:0;
+       bottom:0;
+       top:0;
+       margin:auto;
+       border: 2px solid rgb(175, 158, 6);
+       z-index: 4;
+    }
+    #second, #minute, #hour{
+        position: absolute;
+        width: 100%;
+        height: 100%;
+    }
+    #second{
+        z-index: 3;
+
+    }
+    #minute{
+        z-index: 2;
+    }
+    #hour{
+        z-index: 1;
+    }
+    #second::after, #minute::after, #hour::after, #second::before{
+        content: "";
+        display: block;
+        position:absolute;
+        left:50%;
+        top:50%;
+        transform: translate(-50%, -100%);
+    }
+    #second::after{
+        height: 40%;
+        width:1px;
+        background-color: red;
+   }
+    #second::before{
+        height: 12%;
+        width:1px;
+        background-color: red;
+        transform: translate(-50%);
+    }
+    #minute::after{
+        height: 35%;
+        width:3px;
+        background-color: rgba(71, 71, 67, 0.952);
+        border-radius: 20px;
+   }
+    #hour::after{
+        height: 25%;
+        width:5px;
+        background-color: rgb(71, 71, 70);
+        border-radius: 20px;
+        z-index: 1;
+    }
+    #digitalClock{
+        position: absolute;
+        font-family: cursive;
+        background: #f3f2f2;
+        padding: 0 6px;
+        box-shadow:inset 0 0 2px 1px #0000001a;
+        text-align: center;
+        border-radius: 4px;
+        top:50%;
+        left:70%;
+        transform: translate(-50%, -50%);
+    }
+</style>
+<body>
+    <div class="clock-container">
+        <div class="clock area">
+            <div id="second"></div>
+            <div id="minute"></div>
+            <div id="hour"></div>
+            <div id="digitalClock">12:00 PM</div>
+        </div>
+    </div>  
+
+    <script>
+        var hour          = document.getElementById("hour");
+        var minute        = document.getElementById("minute");
+        var second        = document.getElementById("second");
+        var digitalClock  = document.getElementById("digitalClock");
+        
+        function setClockTime(){
+            const day   = new Date();
+            const hh    = day.getHours();     // 0 - 23
+            const mm    = day.getMinutes();   //0 - 59
+            const ss    = day.getSeconds();   //0 - 59
+            
+            const hourDeg   = (hh * 30) + (mm * 0.5); //every 60min,30deg then 30/60 = 0.5 per min
+            const minuteDeg = (mm * 6) + (ss * 0.1); //every 60sec,6deg then 6/60 = 0.1 per sec
+            const secondDeg = (ss * 6);
+
+            hour.style.transform    = `rotateZ(${hourDeg}deg)`;
+            minute.style.transform  = `rotateZ(${minuteDeg}deg)`;
+            second.style.transform  = `rotateZ(${secondDeg}deg)`;
+
+            digitalClock.innerHTML  =  `${hh%12<10?'0':''}${hh%12}:${mm<10?'0':''}${mm} ${hh>=12?'PM':'AM'}`;
+        }
+        setClockTime();
+        setInterval(setClockTime, 1000);
+    </script>
+</body>
+</html>
